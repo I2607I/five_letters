@@ -6,9 +6,15 @@ words = ['олово', 'волна', 'шапка', 'короб', 'дверь', '
          'взлет', 'штора', 'капот', 'сплав', 'эпоха', 'титан', 'аркан']
 answer = random.choice(words)
 
+COUNT_ROUND = 5
+
 
 def start_print():
-    text = 'Привет! Для начала игры нажми Enter, для настроек нажми s и Enter.'
+    text = (
+        'Для начала игры нажми Enter\n'
+        'Для настроек нажми s и Enter\n'
+        'Для выхода напиши exit и нажми Enter'
+    )
     print(text, end='')
 
 
@@ -61,24 +67,44 @@ def print_word(word: list, answer: list) -> bool:
 def word_str_to_lst(word: str):
     return list(word)
 
+while True:
+    answer = word_str_to_lst(word=answer)
+    start_print()
+    inp = input('\n>>> ')
+    count_round = 0
+    if inp == '':
+        print('Старт игры')
+        while True:
+            word = input('>>>>> ')
+            if len(word) != 5:
+                print('\nОшибка ввода. Введи слово из 5 букв.', end='')
+                continue
+            count_round += 1
+            word = word_str_to_lst(word=word)
+            if print_word(word=word, answer=answer):
+                print(f'\nТы выиграл за {count_round} ходов!\n')
+                break
+            if count_round >= COUNT_ROUND:
+                print(f'\nТы проиграл!!! Ты не выиграл за {COUNT_ROUND} ходов!\n')
+                break
+            print()
 
-answer = word_str_to_lst(word=answer)
-start_print()
-inp = input('\n>>> ')
-count_round = 0
-if inp == '':
-    print('Старт игры')
-    while True:
-        word = input('>>> ')
-        if len(word) != 5:
-            print('\nОшибка ввода. Введи слово из 5 букв.', end='')
-            continue
-        count_round += 1
-        word = word_str_to_lst(word=word)
-        if print_word(word=word, answer=answer):
-            print(f'\nПобеда за {count_round} ходов!')
-            break
-        print()
-
-elif inp == 's':
-    print('\nНастройки. Тут можно будет выбрать длину слов, цвета букв и т.д.')
+    elif inp == 's':
+        text = (
+            '\nНастройки.\n'
+            'Тут можно будет выбрать длину слов, цвета букв и т.д.\n'
+            'Введи c для настройки цветов.\n'
+            'Введи l для настройки длины слов.\n'
+            'Введи q для выхода в меню'
+        )
+        print(text)
+        while True:
+            s = input('>>>>> ')
+            if s == 'c':
+                print('\nНастройки цвета')
+            elif s == 'l':
+                print('\nНастройки длины слов')
+            elif s == 'q':
+                break
+    elif inp == 'exit':
+        break
